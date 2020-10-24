@@ -19,6 +19,13 @@ class Cell:
             return "X"
 
 class Board:
+    #  ----------------
+    #  |0  1  2  3  4 |
+    #  |5  6  7  8  9 |
+    #  |10 11 12 13 14|
+    #  |15 16 17 18 19|
+    #  |20 21 22 23 24|
+    #  ----------------
     _X = 5
     _Y = 5
     
@@ -53,11 +60,13 @@ b = Board()
 for i in range(25):
     assert not b[i].isVisible()
 
-b[6].dissipate()
-b.draw()
 
-print()
-b.update()
-b.update()
-b.update()
-b.draw()
+if __name__ == "__main__":
+    b[6].dissipate()
+    b.draw()
+
+    print()
+    b.update()
+    b.update()
+    b.update()
+    b.draw()
