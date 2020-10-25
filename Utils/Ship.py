@@ -1,4 +1,4 @@
-from BattleUnit import BattleUnit
+from Utils.BattleUnit import BattleUnit
 
 class CapitalShip(BattleUnit):
     # parent of all capital ships
@@ -14,4 +14,4 @@ class WarShip(BattleUnit):
     # parent of all warships
     _DEFAULT_MP = 1
     def __init__(self, pos, hp, atk, mp=_DEFAULT_MP):
-        super(CapitalShip, self).__init__(pos, hp, atk, mp)
+        super(WarShip, self).__init__(pos, hp, atk, mp)

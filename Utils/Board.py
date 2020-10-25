@@ -1,22 +1,37 @@
 class Cell:
     def __init__(self):
         self._visibility = 0
+        self._display = [' ', 'X']
+        self._seeThrough = False
 
     def isVisible(self):
         return self._visibility > 0
 
     def update(self):
+        self.setDisplay()
         if self.isVisible():
             self._visibility -= 1
     
     def dissipate(self):
         self._visibility = 3
 
-    def __repr__(self):
-        if self.isVisible():
-            return " "
+    def setDisplay(self, display = '', seeThrough = False):
+        display = display.lower()
+        if display == 'capital':
+            self._display = ['△', '▲']
+        elif display == 'warship1':
+            self._display = ['s', '●']
+        elif display == 'warship2':
+            self._display = ['▭', '▬']
         else:
-            return "X"
+            self._display = [' ', 'X']
+        self._seeThrough = seeThrough
+
+    def __repr__(self): 
+        if self.isVisible():
+            return self._display[0]
+        else:
+            return self._display[1] if self._seeThrough else 'X'
 
 class Board:
     #  ----------------
@@ -45,6 +60,9 @@ class Board:
     def update(self):
         for i in range(self._X * self._Y):
             self._board[i].update()
+
+    def getBoard(self):
+        return self._board
 
     def draw(self):
         i = 0
