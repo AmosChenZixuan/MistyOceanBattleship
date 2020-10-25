@@ -1,8 +1,5 @@
 from Utils.Board import Board
 class Game:
-    _FUEL_CAP = 10
-    _FUEL_BANK_CAP = 3
-
     def __init__(self, player1, player2):
         player1.set_opponent(player2)
         player2.set_opponent(player1)
