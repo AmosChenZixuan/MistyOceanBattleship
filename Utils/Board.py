@@ -20,7 +20,7 @@ class Cell:
         if display == 'capital':
             self._display = ['△', '▲']
         elif display == 'warship1':
-            self._display = ['s', '●']
+            self._display = ['◌', '●']
         elif display == 'warship2':
             self._display = ['▭', '▬']
         else:
