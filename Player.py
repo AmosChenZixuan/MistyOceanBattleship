@@ -8,15 +8,19 @@ class Player:
     _FUEL_BANK_CAP = 3
     _HAND_CAP = 10
 
-    def __init__(self, ships:['ships'], deck:['cards'], mode = 'default'):
+    def __init__(self, id, ships:['ships'], deck:['cards'], mode = 'default'):
+        self._id = id
         self._board = Board(mode=mode)
-        self._ships = ships
+        self._units = ships
         self._deck = deck
 
         self._hand = []
         self._fuel = self._BASE_FUEL
         self._fuel_bank = 0
         self._opponent = None
+    
+    def getId(self):
+        return self._id
 
     def consume(self, amount, useBank=True):
         bank, fuel = self.getFuel()
@@ -38,6 +42,9 @@ class Player:
     def get_opponent(self):
         return self._opponent
 
+    def get_unit(self, idx):
+        return self._units[idx]
+
     def storeFuel(self):
         # called at round end, store unused fuel to bank
         if (self._fuel > 0):
@@ -45,8 +52,10 @@ class Player:
             self._fuel = 0
 
     def refill(self, round):
-        # called at round start, refill fuel
+        # called at round start, refill fuel and all units' mp
         self._fuel = min(self._BASE_FUEL + round -1, self._FUEL_CAP)
+        for unit in self._units:
+            unit.refill()
 
     def update(self):
         # called at round end
@@ -58,9 +67,9 @@ class Player:
         return self._board.getBoard()
 
     def getPos(self):
-        # [capital war1 war2]
-        ships = self._ships
-        return [ships[i].at() for i in range(3)]
+        # [capital war1 war2 ...]
+        units = self._units
+        return [units[i].at() for i in range(len(units))]
     
     def getFuel(self):
         return (self._fuel_bank, self._fuel)

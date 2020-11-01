@@ -17,29 +17,36 @@ if __name__ == '__main__':
     pos1 = request_formation('player1')
     pos2 = request_formation('player2')
 
-    ships1 = [CapitalShip(pos1[0]), WarShip(pos1[1], 20, 5), WarShip(pos1[2], 20, 5)]
-    ships2 = [CapitalShip(pos2[0]), WarShip(pos2[1], 20, 5), WarShip(pos2[2], 20, 5)]
+    ships1 = [CapitalShip(pos1[0]), WarShip(pos1[1], 20, 10), WarShip(pos1[2], 50, 5)]
+    ships2 = [CapitalShip(pos2[0]), WarShip(pos2[1], 20, 10), WarShip(pos2[2], 50, 5)]
 
     deck1 = []
     deck2 = []
 
-    player1 = Player(ships1, deck1)
-    player2 = Player(ships2, deck2)
+    player1 = Player('player1', ships1, deck1)
+    player2 = Player('player2', ships2, deck2)
 
     # init game
     game = Game(player1, player2)
 
     acitons = {'next': game.next_round,
                 'test': game.Test_random_dissipate,
+                'move': game.move,
+                'attack': game.attack,
+                'atk': game.attack,
                 'quit': game.gameover}
 
     while game.isRunning():
         game.draw()
         try:
-            action = acitons[input("Your move:")]
-            action()
+            cmd = input("Your move:").split()
+            action = acitons[cmd[0]]
+            args = cmd[1:]
+            action(*args)
         except(KeyError):
             print('Invalid Move')
-        
+        except:
+            print('Command Failed')
+
         
     
