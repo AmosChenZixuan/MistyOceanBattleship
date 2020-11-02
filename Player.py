@@ -1,12 +1,13 @@
 from Utils.Board import *
 from Utils.Ship import *
 # from Utils.Card import *
+from random import choice
 
 class Player:
     _BASE_FUEL = 3
     _FUEL_CAP = 10
     _FUEL_BANK_CAP = 3
-    _HAND_CAP = 10
+    _HAND_CAP = 2
 
     def __init__(self, id, ships:['ships'], deck:['cards'], mode = 'default'):
         self._id = id
@@ -14,7 +15,7 @@ class Player:
         self._units = ships
         self._deck = deck
 
-        self._hand = []
+        self._inventory = dict.fromkeys(range(5), 0)
         self._fuel = self._BASE_FUEL
         self._fuel_bank = 0
         self._opponent = None
@@ -27,6 +28,9 @@ class Player:
         total_available = fuel + (0 if not useBank else bank)
         if amount > total_available:
             return False
+        if not useBank:
+            self._fuel -= amount
+            return True
         # use bank first
         fianl_cost = amount - bank
         if fianl_cost < 0:
@@ -44,6 +48,18 @@ class Player:
 
     def get_unit(self, idx):
         return self._units[idx]
+    
+    def get_inv(self):
+        return self._inventory
+
+    def add2inv(self):
+        not_full = [i for i in self._inventory if self._inventory[i] < self._HAND_CAP]
+        if len(not_full) == 0:
+            print("Full Inventory. Can not add more")
+            return
+        type_idx = choice(not_full)
+        self._inventory[type_idx] += 1
+        return self._inventory
 
     def storeFuel(self):
         # called at round end, store unused fuel to bank
@@ -52,7 +68,7 @@ class Player:
             self._fuel = 0
 
     def refill(self, round):
-        # called at round start, refill fuel and all units' mp
+        # called at round start, refill fuel and update all units' status(mp, load counter)
         self._fuel = min(self._BASE_FUEL + round -1, self._FUEL_CAP)
         for unit in self._units:
             unit.refill()

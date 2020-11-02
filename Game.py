@@ -1,4 +1,5 @@
 from Utils.Board import Board
+from Utils.Artillery import *
 class Game:
     def __init__(self, player1, player2):
         player1.set_opponent(player2)
@@ -31,8 +32,15 @@ class Game:
         self._round_counter += 1
         self._round_token = self._players[self._round_counter%2 - 1]
         self._round_token.refill(self._round_counter)
-        # TO-DO draw cards for both players 
-        # TO_DO trigger some ship's round-start effect
+        # recharge Artilleries for both player
+        turn = (self._round_counter + 2) % 4
+        if  turn == 1:
+            self._players[0].add2inv()
+            self._players[0].add2inv()
+        elif turn == 0:
+            self._players[1].add2inv()
+            self._players[1].add2inv()
+        # trigger some ship's round-start effect
 
     
     def current_turn(self):
@@ -81,6 +89,11 @@ class Game:
         print(f"Fuel[{fuel}]               Fuel[{opp_fuel}]")
         for i in range(3):
             print(f"{player.get_unit(i)}       {opp.get_unit(i)}")
+        print('Inventory:')
+        player_inv = player.get_inv()
+        opp_inv = opp.get_inv()
+        for i in range(len(player_inv)):
+            print(f"Type{i}[{player_inv[i]}]             Type{i}[{opp_inv[i]}]")
         print('\n=====================\n')
 
     def Test_random_dissipate(self):
@@ -88,17 +101,17 @@ class Game:
         import random
         response = self.current_player().consume(2, useBank=True)
         if response:
-            x,y = random.sample(range(25), 2)
+            '''x,y = random.sample(range(25), 2)
             cur_board = self.current_player().getBoard()
             cur_board[x].dissipate()
-            cur_board[y].dissipate()
+            cur_board[y].dissipate()'''
             x,y = random.sample(range(25), 2)
             opp_board = self.current_player().get_opponent().getBoard()
             opp_board[x].dissipate()
             opp_board[y].dissipate()
 
-            self.current_player().get_unit(0).takeDamage(10)
-            self.checkGameOver()
+            '''self.current_player().get_unit(0).takeDamage(10)
+            self.checkGameOver()'''
         else:
             print("not enough fuel. Oops")
 
@@ -122,10 +135,13 @@ class Game:
         target_index = int(target_index)
         player = self.current_player()
         opp = player.get_opponent()
-        _, fuel = player.getFuel()
+        unit = player.get_unit(unit_idx)
         status = False
-        if not player.get_unit(unit_idx).isAlive():
+        if not unit.isAlive():
             print("Failed to attack. The unit is dead")
+            return status
+        elif not unit.ableAttck():
+            print("Failed to attack. The unit is not ready")
             return status
         elif player.consume(3, useBank=False):
             damage, atk_range = player.get_unit(unit_idx).attack(target_index)
@@ -147,8 +163,34 @@ class Game:
                     opp.get_unit(i).takeDamage(dmg)
                     print(f"Hit! {i} took {dmg} damage")
             self.checkGameOver()
+            status = True
         else:
             print("Failed to attack. Not enough fuel")
+        return status
+    
+    def equip(self, unit_idx, artillery_type):
+        unit_idx = int(unit_idx)
+        artillery_type = int(artillery_type)
+
+        atype = INV_MAP[artillery_type]
+        player = self.current_player()
+        unit = player.get_unit(unit_idx)
+        status = False
+        if not unit.isAlive():
+            print("Failed to equip. The unit is dead")
+            return status
+        elif player.get_inv()[artillery_type] <= 0:
+            print("Failed to equip. The artillery is currently unavailable")
+            return status
+        elif player.consume(atype.cost, useBank = True):
+            unit.equip(atype())
+            player.get_inv()[artillery_type] -= 1
+            status = True
+        else:
+            print("Failed to equip. Not enough fuel")
+        return status
+        
+
 
 
 

@@ -30,10 +30,11 @@ if __name__ == '__main__':
     game = Game(player1, player2)
 
     acitons = {'next': game.next_round,
-                'test': game.Test_random_dissipate,
+                'invoke': game.Test_random_dissipate,
                 'move': game.move,
                 'attack': game.attack,
                 'atk': game.attack,
+                'equip': game.equip,
                 'quit': game.gameover}
 
     while game.isRunning():
@@ -45,8 +46,8 @@ if __name__ == '__main__':
             action(*args)
         except(KeyError):
             print('Invalid Move')
-        except:
-            print('Command Failed')
+        #except:
+        #    print('Command Failed')
 
         
     

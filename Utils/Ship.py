@@ -9,7 +9,7 @@ class CapitalShip(BattleUnit):
         super(CapitalShip, self).__init__(pos, hp, atk, mp)
     
     def __repr__(self):
-        return f'Capital({self._current_hp}-{self._base_atk+self._bouns_atk}-{self._current_mp})'
+        return f'Capital({self._current_hp}-{self._base_atk+self._bouns_atk}-{self._current_mp}) - {self._artillery}'
 
 
 
@@ -20,4 +20,4 @@ class WarShip(BattleUnit):
         super(WarShip, self).__init__(pos, hp, atk, mp)
 
     def __repr__(self):
-        return f'WarShip({self._current_hp}-{self._base_atk+self._bouns_atk}-{self._current_mp})'
+        return f'WarShip({self._current_hp}-{self._base_atk+self._bouns_atk}-{self._current_mp}) - {self._artillery}'

@@ -31,7 +31,7 @@ class BattleUnit:
         if self._artillery == None:
             return True
         else:
-            return True
+            return self._artillery.ready()
 
     def isAlive(self):
         return self._current_hp > 0
@@ -46,9 +46,12 @@ class BattleUnit:
         return self._current_hp
     
     def refill(self):
-        # refill mp
+        # refill mp, update load counter
         if self.isAlive():
             self._current_mp = self._base_mp
+            self._bouns_atk = 0
+            if self._artillery:
+                self._artillery.update()
 
     def move(self, direction, forbid_pos):
         # direction: 'up' / 'down' / 'left' / 'right'
@@ -81,6 +84,14 @@ class BattleUnit:
     def attack(self, target_idx):
         if self._artillery == None:
             return (self._base_atk + self._bouns_atk, [target_idx])
+        else:
+            damage = self._artillery.damage + self._base_atk + self._bouns_atk
+            arange = self._artillery.get_range(target_idx)
+            self._artillery = None
+            return (damage, arange)
+    
+    def equip(self, artillery):
+        self._artillery = artillery
 
     
     
