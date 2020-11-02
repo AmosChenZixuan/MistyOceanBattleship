@@ -17,9 +17,9 @@ class Artillery:
 
 class TypeZero(Artillery):
     # Single Target
-    #  ----
-    #  |  |
-    #  ----
+    #  -----
+    #  | T |
+    #  -----
     damage = 3
     load_time = 0
     cost = 1
@@ -32,10 +32,10 @@ class TypeZero(Artillery):
 class TypeOne(Artillery):
     # Two Targets
     #  ---------
-    #  |   |   |
+    #  | T |   |
     #  ---------
     damage = 1
-    load_time = 2
+    load_time = 0
     cost = 2
     def __init__(self):
         super(TypeOne, self).__init__(self.load_time)
@@ -45,6 +45,41 @@ class TypeOne(Artillery):
         if (target+1) % Board._X != 0:
             arange.append(target + 1)
         return arange
+
+class TypeTwo(Artillery):
+    # Two Targets
+    #  -----
+    #  | T |
+    #  -----
+    #  |   |
+    #  -----
+    damage = 1
+    load_time = 0
+    cost = 2
+
+class TypeThree(Artillery):
+    # Four Targets
+    #  ---------
+    #  | T |   |
+    #  ---------
+    #  |   |   |
+    #  ---------
+    damage = 1
+    load_time = 1
+    cost = 3
+
+class TypeFour(Artillery):
+    # Four Targets
+    #      -----
+    #      |   |
+    #  -------------
+    #  |   | T |   |
+    #  -------------
+    #      |   |
+    #      -----
+    damage = 0
+    load_time = 2
+    cost = 3
 
 INV_MAP = {0: TypeZero,
             1: TypeOne,
