@@ -43,6 +43,7 @@ class Game:
             self._players[1].add2inv()
             self._players[1].add2inv()
         # trigger some ship's round-start effect
+        return True, ''
 
     def current_turn(self):
         return self._round_counter
@@ -119,33 +120,29 @@ class Game:
         import random
         response = self.current_player().consume(2, useBank=True)
         if response:
-            '''x,y = random.sample(range(25), 2)
-            cur_board = self.current_player().getBoard()
-            cur_board[x].dissipate()
-            cur_board[y].dissipate()'''
             x, y = random.sample(range(25), 2)
             opp_board = self.current_player().get_opponent().getBoard()
             opp_board[x].dissipate()
             opp_board[y].dissipate()
-
-            '''self.current_player().get_unit(0).takeDamage(10)
-            self.checkGameOver()'''
+            return True, ''
         else:
-            print("not enough fuel. Oops")
+            print(msg := 'not enough fuel. Oops')
+            return False, msg
 
     def move(self, unit_idx, direction):
         unit_idx = int(unit_idx)
         player = self.current_player()
         _, fuel = player.getFuel()
         status = False
+        msg = ''
         if fuel < 1:
-            print("Failed to move. Not enought fuel")
+            print(msg := 'Failed to move. Not enought fuel')
         elif player.get_unit(unit_idx).move(direction, player.getPos()):
             status = True
             player.consume(1, useBank=False)
         else:
-            print("Failed to move. You may have ran out of MP or invalid direction")
-        return status
+            print(msg := 'Failed to move. You may have ran out of MP or invalid direction')
+        return status, msg
 
     def attack(self, unit_idx, target_index):
         unit_idx = int(unit_idx)
@@ -156,12 +153,10 @@ class Game:
         status = False
         msg = ''
         if not unit.isAlive():
-            msg = 'Failed to attack. The unit is dead'
-            print(msg)
+            print(msg := 'Failed to attack. The unit is dead')
             return status, msg
         elif not unit.ableAttck():
-            msg = 'Failed to attack. The unit is not ready'
-            print(msg)
+            print(msg := 'Failed to attack. The unit is not ready')
             return status, msg
         elif player.consume(3, useBank=False):
             damage, atk_range = player.get_unit(unit_idx).attack(target_index)
@@ -181,12 +176,12 @@ class Game:
                 dmg = atk_map[opp_pos[i]]
                 if dmg != 0:
                     opp.get_unit(i).takeDamage(dmg)
-                    print(f"Hit! {i} took {dmg} damage")
+                    print(dmg_msg := f"Hit! {i} took {dmg} damage")
+                    msg += f'{dmg_msg}\n'
             self.checkGameOver()
             status = True
         else:
-            msg = 'Failed to attack. Not enough fuel'
-            print(msg)
+            print(msg := 'Failed to attack. Not enough fuel')
         return status, msg
 
     def equip(self, unit_idx, artillery_type):
@@ -197,19 +192,21 @@ class Game:
         player = self.current_player()
         unit = player.get_unit(unit_idx)
         status = False
+        msg = ''
         if not unit.isAlive():
-            print("Failed to equip. The unit is dead")
-            return status
+            
+            print(msg := 'Failed to equip. The unit is dead')
+            return status, msg
         elif player.get_inv()[artillery_type] <= 0:
-            print("Failed to equip. The artillery is currently unavailable")
-            return status
+            print(msg := "Failed to equip. The artillery is currently unavailable")
+            return status, msg
         elif player.consume(atype.cost, useBank=True):
             unit.equip(atype())
             player.get_inv()[artillery_type] -= 1
             status = True
         else:
-            print("Failed to equip. Not enough fuel")
-        return status
+            print(msg := "Failed to equip. Not enough fuel")
+        return status, msg
 
 
 if __name__ == '__main__':
