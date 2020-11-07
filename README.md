@@ -5,7 +5,7 @@
 ### Nov.6
 
 - Websocket adapter (`adapter_main.py`) for connect, disconnect and next round
-- Integrate manual into this `README.md`
+- Integrate `manual.md` into this `README.md`
 
 ### Nov.2
 
@@ -41,14 +41,14 @@ Implemented functionalities of 5 types of artillery
 
 Some ideas
 
-- status: whether the commend was successful
-- current board
-- units status
-- fuel&bank
-- inventory of artilleries
-- game status: still running or game over
-- winner
-- messeage
+- Status: whether the commend was successful
+- Current board
+- Units status
+- Fuel & bank
+- Inventory of artilleries
+- Game status: still running or game over
+- Winner
+- Messeage
 
 ## JSON Schema for Networking
 
@@ -69,10 +69,12 @@ Some ideas
 
 ### `Action.DISCONNECT`
 
+在connect之后的所有请求都要带上connect返回的房间号（`id`）。
+
 ```json
 {
     "action": "disconnect",
-    "id": 0  // Game id returned by connect
+    "id": 0
 }
 ```
 
