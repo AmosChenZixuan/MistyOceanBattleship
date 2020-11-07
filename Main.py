@@ -2,6 +2,7 @@ from Game import Game
 from Player import Player
 from Utils.Ship import *
 import traceback
+import json
 
 def request_formation(name):
     pos = []
@@ -39,18 +40,22 @@ if __name__ == '__main__':
                 'quit': game.gameover}
 
     while game.isRunning():
-        game.draw()
+        to_dump = game.draw()
+        print(to_dump)
+        with open('result.json', 'w') as fp:
+            json.dump(to_dump, fp)
         try:
             cmd = input("Your move:").split()
             action = acitons[cmd[0]]
-            args = cmd[1:]
+            args  = cmd[1:]
             action(*args)
+            
         except(KeyError):
             print('Invalid Move')
         except:
             print('Command Failed')
             traceback.print_exc()
-
+            
 
         
     

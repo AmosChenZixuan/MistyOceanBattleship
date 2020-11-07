@@ -10,8 +10,9 @@ class CapitalShip(BattleUnit):
     
     def __repr__(self):
         return f'Capital({self._current_hp}-{self._base_atk+self._bouns_atk}-{self._current_mp}) - {self._artillery}'
-
-
+    def to_string (self):
+        ship_info={"type": "Capital","curren_hp": self._current_hp, "base_attac": self._base_atk, "current_mp": self._current_mp,"artillery": self._artillery}
+        return ship_info
 
 class WarShip(BattleUnit):
     # parent of all warships
@@ -21,3 +22,7 @@ class WarShip(BattleUnit):
 
     def __repr__(self):
         return f'WarShip({self._current_hp}-{self._base_atk+self._bouns_atk}-{self._current_mp}) - {self._artillery}'
+    
+    def to_string(self):
+        ship_info={"type": "warship","curren_hp": self._current_hp, "base_attac": self._base_atk, "current_mp": self._current_mp,"artillery": self._artillery}
+        return ship_info

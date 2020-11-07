@@ -1,5 +1,6 @@
 from Utils.Board import Board
 from Utils.Artillery import *
+import json
 class Game:
     def __init__(self, player1, player2):
         player1.set_opponent(player2)
@@ -66,6 +67,7 @@ class Game:
         for i in opp_board:
             i.setDisplay()
         # render units
+
         for i in range(len(cur_pos)):
             title = 'capital' if i == 0 else f'warship{i}'
             if player.get_unit(i).isAlive():
@@ -74,7 +76,8 @@ class Game:
             title = 'capital' if i == 0 else f'warship{i}'
             if opp.get_unit(i).isAlive():
                 opp_board[opp_pos[i]].setDisplay(title, seeThrough=False)
-
+        to_print_cur=player.get_board_json()
+        to_print_opp=opp.get_board_json()
         # draw board
         print(f"[{player.getId()}]              [{opp.getId()}]")
         index = 0
@@ -95,6 +98,13 @@ class Game:
         for i in range(len(player_inv)):
             print(f"Type{i}[{player_inv[i]}]             Type{i}[{opp_inv[i]}]")
         print('\n=====================\n')
+        to_dump= {"cur_board": to_print_cur, "opp_board":to_print_opp, "bank":bank, "fuel":fuel,
+                         "opp_bank":opp_bank, "opp_fuel":opp_bank, "your_captial": player.get_unit(0).to_string(),
+                                    "your_warship1": player.get_unit(1).to_string(), "your_warship2": player.get_unit(2).to_string(),
+                                            "opp_capital": opp.get_unit(0).to_string(), "opp_warship1 ": opp.get_unit(1).to_string(),
+                                                    "opp_warship2": opp.get_unit(2).to_string(), "your_inventory": player_inv,
+                                                            "opp_inventory": opp_inv}
+        return to_dump
 
     def Test_random_dissipate(self):
         # test method, randomly dissipate two blocks for both player. cost two fuel
