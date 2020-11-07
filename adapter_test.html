@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Adapter Test</title>
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script type="text/javascript">
+  $(() => {
+    $('#connect_websocket').click(() => {
+      if (window.socket) {
+        window.socket.close()
+      }
+
+      let socket = new WebSocket('ws://127.0.0.1:4399/game')
+      socket.onopen = () => {
+        console.log('Websocket opened')
+        $('#message_container').prepend('<p>Websocket已连接</p>')
+      }
+      socket.onmessage = e => {
+        console.log(`message: ${JSON.parse(e.data)}`)
+        $('#message_container').prepend('<p>' + JSON.parse(e.data) + '</p>')
+      }
+
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.onopen()
+      }
+      window.socket = socket
+    })
+
+    $('#send_message').click(() => {
+      if (!window.socket) {
+        alert('Websocket未连接')
+      } else {
+        window.socket.send($('#message').val())
+      }
+    })
+
+    $('#close_websocket').click(() => {
+      if (window.socket) {
+        window.socket.close()
+        console.log('Websocket已关闭')
+        $('#message_container').prepend('<p>Websocket已关闭</p>')
+      }
+    })
+
+    $('#clear_msg_container').click(() => {
+      $('#message_container').empty()
+    })
+  })
+  </script>
+</head>
+<body>
+  <h1>Adapter Test</h1>
+  <h2>发送消息</h2>
+  <textarea id="message"></textarea>
+  <br/>
+  <button type="button" id="connect_websocket">连接Websocket</button>
+  <button type="button" id="send_message">发送消息</button>
+  <button type="button" id="close_websocket">关闭Websocket</button>
+  <h2>接收消息</h2>
+  <button type="button" id="clear_msg_container">清空消息记录</button>
+  <div id="message_container"/>
+</body>
+</html>

@@ -40,10 +40,7 @@ if __name__ == '__main__':
                 'quit': game.gameover}
 
     while game.isRunning():
-        to_dump = game.draw()
-        print(to_dump)
-        with open('result.json', 'w') as fp:
-            json.dump(to_dump, fp)
+        game.draw()
         try:
             cmd = input("Your move:").split()
             action = acitons[cmd[0]]
