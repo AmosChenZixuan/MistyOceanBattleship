@@ -15,22 +15,19 @@ class Cell:
     def dissipate(self):
         self._visibility = 3
 
-    # def setDisplay(self, display = '', seeThrough = False):
-    #     display = display.lower()
-    #     if display == 'capital':
-    #         self._display = ['△', '▲']
-    #     elif display == 'warship1':
-    #         self._display = ['◌', '●']
-    #     elif display == 'warship2':
-    #         self._display = ['▭', '▬']
-    #     else:
-    #         self._display = [' ', 'X']
-    #     self._seeThrough = seeThrough
-
     def setDisplay(self, display = '', seeThrough = False):
         display = display.lower()
-        self._display = [' ', 'X']
+        if display == 'capital':
+            self._display = ['△', '▲']
+        elif display == 'warship1':
+            self._display = ['◌', '●']
+        elif display == 'warship2':
+            self._display = ['▭', '▬']
+        else:
+            self._display = [' ', 'X']
         self._seeThrough = seeThrough
+
+
 
     def __repr__(self): 
         if self.isVisible():
@@ -81,7 +78,10 @@ class Board:
     def to_json(self):
         json= []
         for i in range(self._X * self._Y):
-            json.append(self._board.__getitem__(i).__repr__())
+            if self._board.__getitem__(i).isVisible():
+                json.append(" ")
+            else:
+                json.append("x")
         return json
 
 
