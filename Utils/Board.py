@@ -75,7 +75,7 @@ class Board:
     def to_json(self):
         json= []
         for i in range(self._X * self._Y):
-            json.append(self._board.__getitem__(i).__repr__())
+            json.append(self._normal_init()[i].__repr__())
         return json
 
 
