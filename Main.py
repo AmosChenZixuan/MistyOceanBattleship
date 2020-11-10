@@ -1,6 +1,8 @@
 from Game import Game
 from Player import Player
 from Utils.Ship import *
+import traceback
+import json
 
 def request_formation(name):
     pos = []
@@ -17,8 +19,8 @@ if __name__ == '__main__':
     pos1 = request_formation('player1')
     pos2 = request_formation('player2')
 
-    ships1 = [CapitalShip(pos1[0]), WarShip(pos1[1], 20, 10), WarShip(pos1[2], 50, 5)]
-    ships2 = [CapitalShip(pos2[0]), WarShip(pos2[1], 20, 10), WarShip(pos2[2], 50, 5)]
+    ships1 = [CapitalShip(pos1[0]), WarShip(pos1[1], 15, 5), WarShip(pos1[2], 20, 3)]
+    ships2 = [CapitalShip(pos2[0]), WarShip(pos2[1], 15, 5), WarShip(pos2[2], 20, 3)]
 
     deck1 = []
     deck2 = []
@@ -42,12 +44,15 @@ if __name__ == '__main__':
         try:
             cmd = input("Your move:").split()
             action = acitons[cmd[0]]
-            args = cmd[1:]
+            args  = cmd[1:]
             action(*args)
+            
         except(KeyError):
             print('Invalid Move')
-        #except:
-        #    print('Command Failed')
+        except:
+            print('Command Failed')
+            traceback.print_exc()
+            
 
         
     

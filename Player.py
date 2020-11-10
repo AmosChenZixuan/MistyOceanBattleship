@@ -90,5 +90,11 @@ class Player:
     def getFuel(self):
         return (self._fuel_bank, self._fuel)
 
-    
+    def get_board_json(self):
+        return self._board.to_json()
 
+
+if __name__ == '__main__':
+    g = Player(1,3, 2)
+
+    print(g.get_board_json())
