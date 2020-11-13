@@ -204,6 +204,7 @@ def attack_action_handler(client_action: Dict[str, Any]) -> str:
 
 @route('/game')
 def game(request, data) -> str:
+    print("Raw message recv from /game",data)
     try:
         client_action: dict = json.loads(data)
     except json.JSONDecodeError as e:

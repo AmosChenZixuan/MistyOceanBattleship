@@ -109,9 +109,9 @@ class Game:
         player_inv = player.get_inv()
         opp_inv = opp.get_inv()
         return {"cur_board": to_print_cur, "opp_board": to_print_opp, "bank": bank, "fuel": fuel,
-                "opp_bank": opp_bank, "opp_fuel": opp_bank, "your_captial": player.get_unit(0).to_string(),
+                "opp_bank": opp_bank, "opp_fuel": opp_bank, "your_capital": player.get_unit(0).to_string(),
                 "your_warship1": player.get_unit(1).to_string(), "your_warship2": player.get_unit(2).to_string(),
-                "opp_capital": opp.get_unit(0).to_string(), "opp_warship1 ": opp.get_unit(1).to_string(),
+                "opp_capital": opp.get_unit(0).to_string(), "opp_warship1": opp.get_unit(1).to_string(),
                 "opp_warship2": opp.get_unit(2).to_string(), "your_inventory": player_inv,
                 "opp_inventory": opp_inv}
 
