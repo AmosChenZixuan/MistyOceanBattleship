@@ -11,7 +11,7 @@ class CapitalShip(BattleUnit):
     def __repr__(self):
         return f'Capital({self._current_hp}-{self._base_atk+self._bouns_atk}-{self._current_mp}) - {self._artillery}'
     def to_string (self):
-        ship_info={"type": "Capital","position": self.at(), "curren_hp": self._current_hp, "base_attac": self._base_atk, "current_mp": self._current_mp,"artillery": self._artillery}
+        ship_info={"type": "Capital","position": self.at(), "curren_hp": self._current_hp, "base_attac": self._base_atk, "current_mp": self._current_mp,"artillery": None if self._artillery is None else self._artillery.to_string()}
         return ship_info
 
 class WarShip(BattleUnit):
@@ -24,5 +24,5 @@ class WarShip(BattleUnit):
         return f'WarShip({self._current_hp}-{self._base_atk+self._bouns_atk}-{self._current_mp}) - {self._artillery}'
     
     def to_string(self):
-        ship_info={"type": "warship","position": self.at(),"curren_hp": self._current_hp, "base_attac": self._base_atk, "current_mp": self._current_mp,"artillery": self._artillery}
+        ship_info={"type": "warship","position": self.at(),"curren_hp": self._current_hp, "base_attac": self._base_atk, "current_mp": self._current_mp,"artillery": None if self._artillery is None else self._artillery.to_string()}
         return ship_info

@@ -97,3 +97,34 @@ Some ideas
     "target_index": 0
 }
 ```
+
+### `Action.EQUIP`
+
+```json
+{
+    "action": "equip",
+    "id": 0,
+    "unit_index": 0,
+    "artillery_type": 1
+}
+```
+
+### `Action.INVOKE`
+
+```json
+{
+    "action": "invoke",
+    "id": 0
+}
+```
+
+### `Action.MOVE`
+
+```json
+{
+    "action": "move",
+    "id": 0,
+    "unit_index": 0,
+    "direction": "down"
+}
+```

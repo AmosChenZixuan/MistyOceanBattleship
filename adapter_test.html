@@ -99,12 +99,17 @@
       height: 300px;
     }
 
-    #json-schema-container {
+    #json-schema-container, #msg-area {
       display: flex;
       flex-direction: row;
     }
 
     #json-schema-container > div {
+      margin-left: 15px;
+      margin-right: 15px;
+    }
+
+    #msg-area > div {
       margin-right: 30px;
     }
   </style>
@@ -364,16 +369,53 @@
 }</code></pre>
       </div>
     </div>
+    <div>
+      <h3><pre><code>Action.EQUIP</code></pre></h3>
+      <div>
+        <pre><code>{
+  "action": "equip",
+  "id": 0,
+  "unit_index": 0,
+  "artillery_type": 1
+}</code></pre>
+      </div>
+    </div>
+    <div>
+      <h3><pre><code>Action.INVOKE</code></pre></h3>
+      <div>
+        <pre><code>{
+  "action": "invoke",
+  "id": 0
+}</code></pre>
+      </div>
+    </div>
+    <div>
+      <h3><pre><code>Action.MOVE</code></pre></h3>
+      <div>
+        <pre><code>{
+  "action": "move",
+  "id": 0,
+  "unit_index": 0,
+  "direction": "down"
+}</code></pre>
+      </div>
+    </div>
   </div>
-  <h2>发送消息</h2>
-  <textarea id="message"></textarea>
-  <br />
-  <button type="button" id="connect_websocket">连接Websocket</button>
-  <button type="button" id="send_message">发送消息</button>
-  <button type="button" id="close_websocket">关闭Websocket</button>
-  <h2>接收消息</h2>
-  <button type="button" id="clear_msg_container">清空消息记录</button>
-  <div id="message_container" />
+  <div id="msg-area">
+    <div>
+      <h2>发送消息</h2>
+      <textarea id="message"></textarea>
+      <br />
+      <button type="button" id="connect_websocket">连接Websocket</button>
+      <button type="button" id="send_message">发送消息</button>
+      <button type="button" id="close_websocket">关闭Websocket</button>
+    </div>
+    <div>
+      <h2>接收消息</h2>
+      <button type="button" id="clear_msg_container">清空消息记录</button>
+      <div id="message_container" />
+    </div>
+  </div>
 </body>
 
 </html>

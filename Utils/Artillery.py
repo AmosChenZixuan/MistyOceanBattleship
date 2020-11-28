@@ -35,6 +35,9 @@ class Artillery:
             arange.append(target - 1)
         return arange
 
+    def to_string(self):
+        return f'{str(type(self))[24:-2]}({self.load_counter})'
+
 class TypeZero(Artillery):
     # Single Target
     #  -----
