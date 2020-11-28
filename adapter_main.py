@@ -22,10 +22,10 @@ def ai_movements(game: Game) -> List[Dict[str, Any]]:
         'quit': game.gameover
     }
 
-    game.draw()
-
     while True:
         try:
+            game.draw()
+
             cmd = input('Your move: ').split()
             action = ACTIONS[cmd[0]]
             args = cmd[1:]
@@ -179,27 +179,30 @@ def attack_action_handler(client_action: Dict[str, Any]) -> str:
     if 'unit_index' not in client_action or 'target_index' not in client_action:
         return {'status_code': 400, 'msg': 'need specify unit_index and target_index'}
 
-    if not room.game.isRunning():
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'game over'}
+    try:
+        if not room.game.isRunning():
+            return {'status_code': 200, 'is_command_success': False, 'msg': 'game over'}
 
-    if room.game.current_player() != room.player:
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn'}
+        if room.game.current_player() != room.player:
+            return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn'}
 
-    is_success, msg = room.game.attack(
-        client_action['unit_index'], client_action['target_index'])
-    if not is_success:
+        is_success, msg = room.game.attack(
+            client_action['unit_index'], client_action['target_index'])
+        if not is_success:
+            return {
+                'status_code': 200,
+                'is_command_success': False,
+                'msg': msg
+            }
+
         return {
             'status_code': 200,
-            'is_command_success': False,
-            'msg': msg
+            'is_command_success': True,
+            'msg': msg,
+            'result': room.game.to_json()
         }
-
-    return {
-        'status_code': 200,
-        'is_command_success': True,
-        'msg': msg,
-        'result': room.game.to_json()
-    }
+    finally:
+        room.game.draw()
 
 
 @route('/game')
