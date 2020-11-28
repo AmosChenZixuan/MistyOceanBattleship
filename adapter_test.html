@@ -98,6 +98,15 @@
       width: 500px;
       height: 300px;
     }
+
+    #json-schema-container {
+      display: flex;
+      flex-direction: row;
+    }
+
+    #json-schema-container > div {
+      margin-right: 30px;
+    }
   </style>
   <script type="text/javascript">
       /**
@@ -309,6 +318,53 @@
 
 <body>
   <h1>Adapter Test</h1>
+  <h2>JSON Schema</h2>
+  <div id="json-schema-container">
+    <div>
+      <h3><pre><code>Action.CONNECT</code></pre></h3>
+      <div>
+        <pre><code>{
+  "action": "connect",
+  "info":
+  {
+      "name": "Player",
+      "init_capital_ship_pos": 1,
+      "init_war_ship_1_pos": 2,
+      "init_war_ship_2_pos": 3
+  }
+}</code></pre>
+      </div>
+    </div>
+    <div>
+      <h3><pre><code>Action.DISCONNECT</code></pre></h3>
+      <div>
+        <pre><code>{
+  "action": "disconnect",
+  "id": 0
+}</code></pre>
+      </div>
+    </div>
+    <div>
+      <h3><pre><code>Action.NEXT</code></pre></h3>
+      <div>
+        <pre><code>{
+  "action": "next",
+  "id": 0
+}</code></pre>
+      </div>
+    </div>
+    <div>
+      <h3><pre><code>Action.ATTACK</code></pre></h3>
+      <div>
+        <pre><code>{
+  "action": "attack",
+  "id": 0,
+  "unit_index": 0,
+  "target_index": 0
+}</code></pre>
+      </div>
+    </div>
+  </div>
   <h2>发送消息</h2>
   <textarea id="message"></textarea>
   <br />

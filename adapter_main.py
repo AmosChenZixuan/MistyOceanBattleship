@@ -33,8 +33,6 @@ def ai_movements(game: Game) -> List[Dict[str, Any]]:
             print(msg)
             if is_success:
                 if cmd[0] == Action.NEXT.value:
-                    movements.append(
-                        {'action': 'next', 'msg': msg, 'result': game.to_json()})
                     return movements
                 if cmd[0] == Action.ATTACK.value:
                     movements.append({
