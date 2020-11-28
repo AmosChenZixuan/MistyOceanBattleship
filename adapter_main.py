@@ -1,3 +1,4 @@
+import random
 from pywss import Pyws, route
 import json
 from enum import Enum
@@ -9,7 +10,72 @@ from Player import Player
 from Utils import Ship
 
 
-def ai_movements(game: Game) -> List[Dict[str, Any]]:
+def random_ai_movements(game: Game) -> List[Dict[str, Any]]:
+    movements = []
+
+    ACTIONS = random.choices((
+        ('invoke', game.Test_random_dissipate),
+        ('move', game.move),
+        ('attack', game.attack),
+        ('equip', game.equip)
+    ), k=2)
+
+    for action_type, action_func in ACTIONS:
+
+        if action_type == 'invoke':
+            print('[RandomAI] invoke')
+            success, msg = action_func()
+            if success:
+                movements.append({'action': 'invoke', 'msg': msg, 'result': game.to_json()})
+
+        elif action_type == 'move':
+            unit_index = random.randint(0, 2)
+            direction = random.choice(('up', 'down', 'left', 'right'))
+            print(f'[RandomAI] move {unit_index} {direction}')
+            success, msg = action_func(unit_index, direction)
+            if success:
+                movements.append({
+                    'action': 'move',
+                    'unit_index': unit_index,
+                    'direction': direction,
+                    'msg': msg,
+                    'result': game.to_json()
+                })
+
+        elif action_type == 'attack':
+            unit_index = random.randint(0, 2)
+            target_index = random.randint(0, 24)
+            print(f'[RandomAI] attack {unit_index} {target_index}')
+            success, msg = action_func(unit_index, target_index)
+            if success:
+                movements.append({
+                    'action': 'attack',
+                    'unit_index': unit_index,
+                    'target_index': target_index,
+                    'msg': msg,
+                    'result': game.to_json()
+                })
+
+        else: # action_type == 'equip'
+            unit_index = random.randint(0, 2)
+            artillery_type = random.randint(0, 4)
+            print(f'[RandomAI] equip {unit_index} {artillery_type}')
+            success, msg = action_func(unit_index, artillery_type)
+            if success:
+                movements.append({
+                    'action': 'equip',
+                    'unit_index': unit_index,
+                    'artillery_type': artillery_type,
+                    'msg': msg,
+                    'result': game.to_json()
+                })
+    
+    print('[RandomAI] next')
+    game.next_round()
+    return movements
+
+
+def human_ai_movements(game: Game) -> List[Dict[str, Any]]:
     movements = []
 
     ACTIONS = {
@@ -157,7 +223,7 @@ def next_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
             'msg': msg
         }
 
-    opponent_moves = ai_movements(room.game)
+    opponent_moves = random_ai_movements(room.game)
 
     return {
         'action_result': {
