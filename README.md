@@ -128,3 +128,12 @@ Some ideas
     "direction": "down"
 }
 ```
+
+### Query Game Status
+
+```json
+{
+    "action": "query",
+    "id": 0
+}
+```

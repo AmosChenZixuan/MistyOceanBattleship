@@ -370,6 +370,20 @@ def move_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def query_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
+    room = Room.get_room_from_id(client_action['id'])
+    if 'id' not in client_action or room is None:
+        return {'status_code': 400, 'msg': 'invalid room id'}
+    
+    return {
+        'status_code': 200,
+        'is_command_success': True,
+        'msg': '',
+        'room_id': room.id,
+        'result': room.game.to_json()
+    }
+
+
 @route('/game')
 def game(request, data) -> Dict[str, Any]:
     print("Raw message recv from /game",data)
@@ -395,6 +409,8 @@ def game(request, data) -> Dict[str, Any]:
         return equip_action_handler(client_action)
     elif client_action['action'] == Action.INVOKE.value:
         return invoke_action_handler(client_action)
+    elif client_action['action'] == 'query':  # just get the game status
+        return query_action_handler(client_action)
     else:
         return {'status_code': 400, 'msg': 'undefined action'}
 
