@@ -211,10 +211,10 @@ def next_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if not room.game.isRunning():
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'game over'}
+        return {'status_code': 200, 'is_command_success': False, 'msg': 'game over', 'room_id': room.id}
 
     if room.game.current_player() != room.player:
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn'}
+        return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn', 'room_id': room.id}
 
     is_success, msg = room.game.next_round()
 
@@ -222,7 +222,8 @@ def next_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {
             'status_code': 200,
             'is_command_success': False,
-            'msg': msg
+            'msg': msg,
+            'room_id': room.id
         }
 
     opponent_moves = random_ai_movements(room.game)
@@ -234,7 +235,8 @@ def next_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
             'msg': msg,
             'result': room.game.to_json(),  # result of own movement
         },
-        'opponent_movements': opponent_moves  # ai movements and their result
+        'opponent_movements': opponent_moves,  # ai movements and their result
+        'room_id': room.id
     }
 
 
@@ -244,14 +246,14 @@ def attack_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if 'unit_index' not in client_action or 'target_index' not in client_action:
-        return {'status_code': 400, 'msg': 'need specify unit_index and target_index'}
+        return {'status_code': 400, 'msg': 'need specify unit_index and target_index', 'room_id': room.id}
 
     try:
         if not room.game.isRunning():
-            return {'status_code': 200, 'is_command_success': False, 'msg': 'game over'}
+            return {'status_code': 200, 'is_command_success': False, 'msg': 'game over', 'room_id': room.id}
 
         if room.game.current_player() != room.player:
-            return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn'}
+            return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn', 'room_id': room.id}
 
         is_success, msg = room.game.attack(
             client_action['unit_index'], client_action['target_index'])
@@ -259,14 +261,16 @@ def attack_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
             return {
                 'status_code': 200,
                 'is_command_success': False,
-                'msg': msg
+                'msg': msg,
+                'room_id': room.id
             }
 
         return {
             'status_code': 200,
             'is_command_success': True,
             'msg': msg,
-            'result': room.game.to_json()
+            'result': room.game.to_json(),
+            'room_id': room.id
         }
     finally:
         room.game.draw()
@@ -278,13 +282,13 @@ def equip_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if 'unit_index' not in client_action or 'artillery_type' not in client_action:
-        return {'status_code': 400, 'msg': 'need specify unit_index and artillery_type'}
+        return {'status_code': 400, 'msg': 'need specify unit_index and artillery_type', 'room_id': room.id}
 
     if not room.game.isRunning():
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'game over'}
+        return {'status_code': 200, 'is_command_success': False, 'msg': 'game over', 'room_id': room.id}
 
     if room.game.current_player() != room.player:
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn'}
+        return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn', 'room_id': room.id}
 
     is_success, msg = room.game.equip(
         client_action['unit_index'], client_action['artillery_type'])
@@ -292,14 +296,16 @@ def equip_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {
             'status_code': 200,
             'is_command_success': False,
-            'msg': msg
+            'msg': msg,
+            'room_id': room.id
         }
 
     return {
         'status_code': 200,
         'is_command_success': True,
         'msg': msg,
-        'result': room.game.to_json()
+        'result': room.game.to_json(),
+        'room_id': room.id
     }
 
 
@@ -309,24 +315,26 @@ def invoke_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if not room.game.isRunning():
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'game over'}
+        return {'status_code': 200, 'is_command_success': False, 'msg': 'game over', 'room_id': room.id}
 
     if room.game.current_player() != room.player:
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn'}
+        return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn', 'room_id': room.id}
 
     is_success, msg = room.game.Test_random_dissipate()
     if not is_success:
         return {
             'status_code': 200,
             'is_command_success': False,
-            'msg': msg
+            'msg': msg,
+            'room_id': room.id
         }
 
     return {
         'status_code': 200,
         'is_command_success': True,
         'msg': msg,
-        'result': room.game.to_json()
+        'result': room.game.to_json(),
+        'room_id': room.id
     }
 
 
@@ -336,27 +344,29 @@ def move_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if 'unit_index' not in client_action or 'direction' not in client_action:
-        return {'status_code': 400, 'msg': 'need specify unit_index and direction'}
+        return {'status_code': 400, 'msg': 'need specify unit_index and direction', 'room_id': room.id}
 
     if not room.game.isRunning():
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'game over'}
+        return {'status_code': 200, 'is_command_success': False, 'msg': 'game over', 'room_id': room.id}
 
     if room.game.current_player() != room.player:
-        return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn'}
+        return {'status_code': 200, 'is_command_success': False, 'msg': 'not your turn', 'room_id': room.id}
 
     is_success, msg = room.game.move(client_action['unit_index'], client_action['direction'])
     if not is_success:
         return {
             'status_code': 200,
             'is_command_success': False,
-            'msg': msg
+            'msg': msg,
+            'room_id': room.id
         }
 
     return {
         'status_code': 200,
         'is_command_success': True,
         'msg': msg,
-        'result': room.game.to_json()
+        'result': room.game.to_json(),
+        'room_id': room.id
     }
 
 
