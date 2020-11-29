@@ -128,7 +128,8 @@ class Game:
             opp_board[y].dissipate()
             return True, ''
         else:
-            print(msg := 'not enough fuel. Oops')
+            msg = 'not enough fuel. Oops'
+            print(msg)
             return False, msg
 
     def move(self, unit_idx, direction):
@@ -138,12 +139,14 @@ class Game:
         status = False
         msg = ''
         if fuel < 1:
-            print(msg := 'Failed to move. Not enought fuel')
+            msg = 'Failed to move. Not enought fuel'
+            print(msg)
         elif player.get_unit(unit_idx).move(direction, player.getPos()):
             status = True
             player.consume(1, useBank=False)
         else:
-            print(msg := 'Failed to move. You may have ran out of MP or invalid direction')
+            msg = 'Failed to move. You may have ran out of MP or invalid direction'
+            print(msg)
         return status, msg
 
     def attack(self, unit_idx, target_index):
@@ -155,10 +158,12 @@ class Game:
         status = False
         msg = ''
         if not unit.isAlive():
-            print(msg := 'Failed to attack. The unit is dead')
+            msg = 'Failed to attack. The unit is dead'
+            print(msg)
             return status, msg
         elif not unit.ableAttck():
-            print(msg := 'Failed to attack. The unit is not ready')
+            msg = 'Failed to attack. The unit is not ready'
+            print(msg)
             return status, msg
         elif player.consume(3, useBank=False):
             damage, atk_range = player.get_unit(unit_idx).attack(target_index)
@@ -178,12 +183,14 @@ class Game:
                 dmg = atk_map[opp_pos[i]]
                 if dmg != 0:
                     opp.get_unit(i).takeDamage(dmg)
-                    print(dmg_msg := f"Hit! {i} took {dmg} damage")
+                    dmg_msg = f"Hit! {i} took {dmg} damage"
+                    print(dmg_msg)
                     msg += f'{dmg_msg}\n'
             self.checkGameOver()
             status = True
         else:
-            print(msg := 'Failed to attack. Not enough fuel')
+            msg = 'Failed to attack. Not enough fuel'
+            print(msg)
         return status, msg
 
     def equip(self, unit_idx, artillery_type):
@@ -196,18 +203,20 @@ class Game:
         status = False
         msg = ''
         if not unit.isAlive():
-            
-            print(msg := 'Failed to equip. The unit is dead')
+            msg = 'Failed to equip. The unit is dead'
+            print(msg)
             return status, msg
         elif player.get_inv()[artillery_type] <= 0:
-            print(msg := "Failed to equip. The artillery is currently unavailable")
+            msg = "Failed to equip. The artillery is currently unavailable"
+            print(msg)
             return status, msg
         elif player.consume(atype.cost, useBank=True):
             unit.equip(atype())
             player.get_inv()[artillery_type] -= 1
             status = True
         else:
-            print(msg := "Failed to equip. Not enough fuel")
+            msg = "Failed to equip. Not enough fuel"
+            print(msg)
         return status, msg
 
 
