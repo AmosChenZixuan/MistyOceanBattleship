@@ -197,7 +197,8 @@ def connect_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def disconnect_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
-    if 'id' not in client_action or (room := Room.get_room_from_id(client_action['id'])) is None:
+    room = Room.get_room_from_id(client_action['id'])
+    if 'id' not in client_action or room is None:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     Room.ROOMS.remove(room)
@@ -205,7 +206,8 @@ def disconnect_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def next_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
-    if 'id' not in client_action or (room := Room.get_room_from_id(client_action['id'])) is None:
+    room = Room.get_room_from_id(client_action['id'])
+    if 'id' not in client_action or room is None:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if not room.game.isRunning():
@@ -237,7 +239,8 @@ def next_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def attack_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
-    if 'id' not in client_action or (room := Room.get_room_from_id(client_action['id'])) is None:
+    room = Room.get_room_from_id(client_action['id'])
+    if 'id' not in client_action or room is None:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if 'unit_index' not in client_action or 'target_index' not in client_action:
@@ -270,7 +273,8 @@ def attack_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def equip_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
-    if 'id' not in client_action or (room := Room.get_room_from_id(client_action['id'])) is None:
+    room = Room.get_room_from_id(client_action['id'])
+    if 'id' not in client_action or room is None:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if 'unit_index' not in client_action or 'artillery_type' not in client_action:
@@ -300,7 +304,8 @@ def equip_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def invoke_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
-    if 'id' not in client_action or (room := Room.get_room_from_id(client_action['id'])) is None:
+    room = Room.get_room_from_id(client_action['id'])
+    if 'id' not in client_action or room is None:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if not room.game.isRunning():
@@ -326,7 +331,8 @@ def invoke_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def move_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
-    if 'id' not in client_action or (room := Room.get_room_from_id(client_action['id'])) is None:
+    room = Room.get_room_from_id(client_action['id'])
+    if 'id' not in client_action or room is None:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     if 'unit_index' not in client_action or 'direction' not in client_action:
