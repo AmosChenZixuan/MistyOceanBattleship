@@ -191,7 +191,13 @@ class Room:
 def connect_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
     try:
         room = Room.create_room(PlayerInfo.parse_player_info(client_action['info']))
-        return {'status_code': 200, 'msg': 'game room created', 'id': room.id, 'game': room.game.to_json()}
+        return {
+            'status_code': 200,
+            'is_command_success': True,
+            'msg': 'game room created',
+            'id': room.id,
+            'result': room.game.to_json()
+        }
     except KeyError as e:
         return {'status_code': 400, 'msg': f'KeyError: {str(e)}'}
 
@@ -202,7 +208,7 @@ def disconnect_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {'status_code': 400, 'msg': 'invalid room id'}
 
     Room.ROOMS.remove(room)
-    return {'status_code': 200, 'msg': 'disconnected'}
+    return {'status_code': 200, 'is_command_success': True, 'msg': 'disconnected'}
 
 
 def next_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
@@ -222,21 +228,17 @@ def next_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {
             'status_code': 200,
             'is_command_success': False,
-            'msg': msg,
-            'room_id': room.id
+            'msg': msg
         }
 
     opponent_moves = random_ai_movements(room.game)
 
     return {
-        'action_result': {
-            'status_code': 200,
-            'is_command_success': True,
-            'msg': msg,
-            'result': room.game.to_json(),  # result of own movement
-        },
-        'opponent_movements': opponent_moves,  # ai movements and their result
-        'room_id': room.id
+        'status_code': 200,
+        'is_command_success': True,
+        'msg': msg,
+        'result': room.game.to_json(),  # result of own movement,
+        'opponent_moves': opponent_moves
     }
 
 
