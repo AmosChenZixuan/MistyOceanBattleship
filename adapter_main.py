@@ -228,7 +228,8 @@ def next_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
         return {
             'status_code': 200,
             'is_command_success': False,
-            'msg': msg
+            'msg': msg,
+            'room_id': room.id
         }
 
     opponent_moves = random_ai_movements(room.game)

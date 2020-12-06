@@ -67,9 +67,9 @@ Some ideas
 }
 ```
 
-### `Action.DISCONNECT`
-
 在connect之后的所有请求都要带上connect返回的房间号（`id`）。
+
+### `Action.DISCONNECT`
 
 ```json
 {
@@ -137,3 +137,37 @@ Some ideas
     "id": 0
 }
 ```
+
+### JSON Response
+
+#### Invalid Request
+
+```json
+{
+    "status_code": 400,
+    "msg": "some error message"
+}
+```
+
+#### Failed Valid Request
+
+```json
+{
+    "status_code": 200,
+    "is_command_success": false,
+    "msg": "some error message"
+}
+```
+
+#### Successful Valid Request
+
+```json
+{
+    "status_code": 200,
+    "is_command_success": true,
+    "msg": "",
+    "result": {}
+}
+```
+
+`Action.DISCONNECT`没有`result`。
