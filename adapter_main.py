@@ -389,7 +389,7 @@ def query_action_handler(client_action: Dict[str, Any]) -> Dict[str, Any]:
 
 @route('/game')
 def game(request, data) -> Dict[str, Any]:
-    print("Raw message recv from /game",data)
+    #print("Raw message recv from /game",data)
     try:
         client_action: Dict[str, Any] = json.loads(data)
     except json.JSONDecodeError as e:
@@ -419,5 +419,5 @@ def game(request, data) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    ws = Pyws(__name__, address='127.0.0.1', port=4399)
+    ws = Pyws(__name__, address='0.0.0.0', port=4399)
     ws.serve_forever()
