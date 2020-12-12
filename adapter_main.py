@@ -13,14 +13,18 @@ from Utils import Ship
 def random_ai_movements(game: Game) -> List[Dict[str, Any]]:
     movements = []
 
-    ACTIONS = random.choices((
+    ACTIONS = [
         ('invoke', game.Test_random_dissipate),
         ('move', game.move),
         ('attack', game.attack),
         ('equip', game.equip)
-    ), k=2)
+    ]
 
-    for action_type, action_func in ACTIONS:
+    player = game.current_player()
+    loop_count = 0  # prevent infinite loop; max trial 10 times
+
+    while player.getFule()[1] > 0 and loop_count < 10:
+        action_type, action_func = random.choices(ACTIONS, weights=[0.1, 0.4, 0.4, 0.1])
 
         if action_type == 'invoke':
             print('[RandomAI] invoke')
@@ -69,6 +73,7 @@ def random_ai_movements(game: Game) -> List[Dict[str, Any]]:
                     'msg': msg,
                     'result': game.to_json()
                 })
+        loop_count += 1
     
     print('[RandomAI] next')
     game.next_round()
