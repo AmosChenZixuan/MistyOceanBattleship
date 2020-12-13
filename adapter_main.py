@@ -23,8 +23,8 @@ def random_ai_movements(game: Game) -> List[Dict[str, Any]]:
     player = game.current_player()
     loop_count = 0  # prevent infinite loop; max trial 10 times
 
-    while player.getFule()[1] > 0 and loop_count < 10:
-        action_type, action_func = random.choices(ACTIONS, weights=[0.1, 0.4, 0.4, 0.1])
+    while player.getFuel()[1] > 0 and loop_count < 10:
+        action_type, action_func = random.choices(ACTIONS, weights=[0.1, 0.4, 0.4, 0.1])[0]
 
         if action_type == 'invoke':
             print('[RandomAI] invoke')
